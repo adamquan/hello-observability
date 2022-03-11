@@ -61,8 +61,6 @@ and see something beautiful!
  
 <img alt="Dashboard" src="./images/dashboard.png" width="800">
 
-Here is a live version of the [dashboard](https://aquan.grafana.net/goto/KUqE5REnk?orgId=1)
-
 
 ## Sending logs, metrics and traces to Grafana Cloud
 
@@ -82,4 +80,6 @@ docker-compose up
 ```
 
 Similary as you have done locally, import the dashboard and enjoy!
+
+Here is a live version of the [dashboard](https://aquan.grafana.net/goto/KUqE5REnk?orgId=1)
 
