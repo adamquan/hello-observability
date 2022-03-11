@@ -4,6 +4,7 @@
 
 # Package Files #
 *.jar
+!hello-observability/opentelemetry-javaagent.jar
 *.war
 *.ear
 
