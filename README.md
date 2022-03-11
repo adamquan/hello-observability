@@ -12,15 +12,23 @@ cd hello-observability/hello-observability
 java -jar target/*.jar
 ```
 
-You can then access Hello Observability here: http://localhost:8080/hello
+You can then access Hello Observability here: http://localhost:8080/hello. Very simple application!
 
-<img width="1042" alt="hello-observability" src="./images/hello-observability.png">
+<img alt="hello-observability" src="./images/hello-observability.png" width="300">
 
 Or you can run it using Docker:
 
 ```
+cd hello-observability/hello-observability
 docker build -t hello-observability .
 docker run -d -p 8080:8080 --name hello-observability hello-observability
+```
+Similarly, you can access the application here: http://localhost:8080/hello
+
+You can stop the docker container using:
+
+```
+docker stop hello-observability
 ```
 
 ## Running everything locally
@@ -31,12 +39,23 @@ You can run the whole stack locally inside Docker, after building the applicatio
 cd hello-observability/local
 docker-compose up
 ```
+After all the containers are up, you can access the appliction here: http://localhost:8080/hello, and Grafana here: http://localhost:3000
+
+<img alt="Grafana" src="./images/grafana-local.png" width="300">
+
+Import the dashboard from the `dashboard.json` file to see something beautiful!
+
+<img alt="Import Dashboard" src="./images/dashboard-import.png" width="500">
+<img alt="Dashboard" src="./images/dashboard.png" width="800">
 
 ## Sending logs, metrics and traces to Grafana Cloud
 
-You can also run the application locally, together with the Grafana Agent and the load runner, and send logs, metrics and traces to Grafana Cloud. You do need to configure the `cloud/config/agent.yaml` file with your Grafana Cloud information.
+You can also run the application locally, together with the Grafana Agent and the load runner, but send logs, metrics and traces to **Grafana Cloud**. You do need to configure the `cloud/config/agent.yaml` file with your Grafana Cloud information.
 
 ```
 cd hello-observability/cloud
 docker-compose up
 ```
+
+Similary as you have done locally, import the dashboard and enjoy!
+
