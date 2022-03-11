@@ -12,7 +12,7 @@ cd hello-observability/hello-observability
 java -jar target/*.jar
 ```
 
-You can then access Hello Observability here: http://localhost:8080/
+You can then access Hello Observability here: http://localhost:8080/hello
 
 <img width="1042" alt="hello-observability" src="./images/hello-observability.png">
 
