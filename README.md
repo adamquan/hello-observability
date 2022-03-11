@@ -53,10 +53,16 @@ After all the containers are up, you can access the appliction here: http://loca
 
 <img alt="Grafana" src="./images/grafana-local.png" width="300">
 
-Import the dashboard from the `dashboard.json` file to see something beautiful!
+Import the dashboard from the `dashboard.json` file,
 
 <img alt="Import Dashboard" src="./images/dashboard-import.png" width="500">
+
+and see something beautiful!
+ 
 <img alt="Dashboard" src="./images/dashboard.png" width="800">
+
+Here is a live version of the [dashboard](https://aquan.grafana.net/goto/KUqE5REnk?orgId=1)
+
 
 ## Sending logs, metrics and traces to Grafana Cloud
 
