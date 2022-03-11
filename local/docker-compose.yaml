@@ -1,0 +1,89 @@
+version: "3"
+services:
+
+  # The hello-observability application
+  hello-observability:
+    image: hello-observability
+    volumes:
+      - ./logs/hello-observability.log:/tmp/hello-observability.log
+      - ./logs/access_log.log:/tmp/access_log.log
+    environment:
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://tempo:4317
+      OTEL_SERVICE_NAME: hello-observability
+      OTEL_TRACES_EXPORTER: otlp
+    ports:
+      - "8080:8080"
+
+  # Our load generator
+  load-generator:
+    image: curlimages/curl:latest
+    volumes:
+      - ../hello-observability/load-generator.sh:/tmp/load-generator.sh
+    command: /bin/sh -c "/tmp/load-generator.sh"
+  
+  loki:
+    image: grafana/loki:latest
+    volumes:
+      - ./config/loki-config.yaml:/etc/config/loki.yaml
+    entrypoint:
+      - /usr/bin/loki
+      - -config.file=/etc/config/loki.yaml
+    ports:
+      - "3100:3100"
+     
+  tempo:
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./config/tempo-local.yaml:/etc/tempo.yaml
+      - ./config/tempo-data:/tmp/tempo
+    ports:
+      - "14268"  # jaeger ingest
+      - "3200"   # tempo
+      - "4317"  # otlp grpc
+      - "4318"  # otlp http
+      - "9411"   # zipkin
+
+  prometheus:
+    image: prom/prometheus:latest
+    command: [ "--config.file=/etc/prometheus.yaml", "--enable-feature=exemplar-storage" ]
+    volumes:
+      - ./config/prometheus.yaml:/etc/prometheus.yaml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:8.4.3
+    volumes:
+      - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_USERS_DEFAULT_THEME=light
+    ports:
+      - "3000:3000"
+
+  agent:
+    image: grafana/agent:latest
+    volumes:
+      - ./config/agent.yaml:/etc/agent-config/agent.yaml
+      - ./logs/hello-observability.log:/tmp/hello-observability.log
+      - ./logs/access_log.log:/tmp/access_log.log
+    entrypoint:
+      - /bin/agent
+      - -config.file=/etc/agent-config/agent.yaml
+      - -metrics.wal-directory=/tmp/agent/wal
+      - -enable-features=integrations-next
+      - -config.expand-env
+      - -config.enable-read-api
+    environment:
+      HOSTNAME: agent
+#      REMOTE_WRITE_HOST: cortex:9009
+      LOKI_HOST: loki:3100
+      TEMPO_HOST: tempo:3200
+    ports:
+      - "12345:12345"
+    depends_on:
+      - loki
+      - tempo
