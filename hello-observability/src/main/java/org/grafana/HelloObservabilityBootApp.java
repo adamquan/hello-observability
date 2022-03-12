@@ -81,7 +81,7 @@ public class HelloObservabilityBootApp {
 	}
 
 	@GetMapping("/observability")
-	public String godOfFire() throws IOException {
+	public String observability() throws IOException {
 		String path = "/observability";
 		requestCounter.labels(path).inc();
 		lastRequestTimestamp.labels(path).setToCurrentTime();

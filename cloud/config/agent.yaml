@@ -59,7 +59,7 @@ traces:
     receivers:
       otlp:
         protocols:
-          http:
+          grpc:
 
 metrics:
   configs:

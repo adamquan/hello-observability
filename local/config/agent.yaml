@@ -1,4 +1,4 @@
-# This file serves as an example agent configuration to interact with the
+# This file serves as the agent configuration to interact with the
 # docker compose environment.
 #
 # You should pass the following command line flags when running the agent
@@ -49,8 +49,6 @@ traces:
       - endpoint: ${TEMPO_HOST}
         insecure: true
     receivers:
-      jaeger:
+      otlp:
         protocols:
-          thrift_http:
-          thrift_compact:
           grpc:
