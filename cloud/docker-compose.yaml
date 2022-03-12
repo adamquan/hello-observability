@@ -8,6 +8,7 @@ services:
       - ./logs/hello-observability.log:/tmp/hello-observability.log
       - ./logs/access_log.log:/tmp/access_log.log
     environment:
+      JAVA_TOOL_OPTIONS: -javaagent:./opentelemetry-javaagent.jar
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://agent:4317
       OTEL_SERVICE_NAME: hello-observability
       OTEL_TRACES_EXPORTER: otlp

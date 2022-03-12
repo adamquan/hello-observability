@@ -1,4 +1,4 @@
-# This file serves as an example agent configuration to interact with the
+# This file serves as the agent configuration to interact with the
 # docker compose environment.
 #
 # You should pass the following command line flags when running the agent
@@ -55,18 +55,10 @@ traces:
       - endpoint: tempo-us-central1.grafana.net:443
         basic_auth:
           username: 160639
-          # Replace <Grafana API Key> below with an API key that 
-          # has the "Metrics Publisher" role
           password: eyJrIjoiZGNjYjFjMzFjMTQ2YTA4MmI3YzhiMWRhNDdlOTFhNmJiNGE5OTRmMyIsIm4iOiJhZGFtIiwiaWQiOjYwMTM4MH0=
     receivers:
-      jaeger:
-        protocols:
-          thrift_http:
-          thrift_compact:
-          grpc:
       otlp:
         protocols:
-          grpc:
           http:
 
 metrics:
@@ -74,8 +66,8 @@ metrics:
   - name: hello-observability
     remote_write:
     - basic_auth:
-        password: eyJrIjoiOWYzMmViNDMwNGMzZjM5ZDZjY2JiZTUwZDI4YTlmMDY3MTlkZGM3YSIsIm4iOiJhcXVhbi1lYXN5c3RhcnQtcHJvbS1wdWJsaXNoZXIiLCJpZCI6NjAxMzgwfQ==
         username: 330312
+        password: eyJrIjoiOWYzMmViNDMwNGMzZjM5ZDZjY2JiZTUwZDI4YTlmMDY3MTlkZGM3YSIsIm4iOiJhcXVhbi1lYXN5c3RhcnQtcHJvbS1wdWJsaXNoZXIiLCJpZCI6NjAxMzgwfQ==
       url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
     scrape_configs:
     - job_name: hello-observability
@@ -92,5 +84,3 @@ metrics:
     external_labels:
       monitor: hello-observability
   wal_directory: /tmp/grafana-agent-wal
-  
-
