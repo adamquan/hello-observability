@@ -3,7 +3,7 @@ Simple [Spring Boot](https://spring.io/guides/gs/spring-boot) application to dem
 
 Refer to this [documentation](https://docs.google.com/document/d/1uU9BbLH3OrBRLPAOQyQ5W2MeeTup5F2m2x1Qs4QGsnA/edit?usp=sharing) for details.
 
-You can build a jar file and run it from the command line.
+To just see the application in action, you can build a jar file and run it from the command line.
 
 ```
 git clone https://github.com/adamquan/hello-observability.git
@@ -31,9 +31,19 @@ You can stop the docker container using:
 docker stop hello-observability
 ```
 
+**Note** that when you run the application either using the Jar file or directly with docker, nothing will be collected. You will need start all services using `docker-compose`, either all locally or connect to Grafana Cloud, to generate and collect logs, metrics and traces.
+
 ## Running everything locally
 
-You can run the whole stack locally inside Docker, after building the application container:
+You can run the whole stack locally inside Docker, after building the application container. The whole stack contains:
+
+- The Hello Observability application
+- The simple load runner
+- Prometheus for metrics
+- Loki for logs
+- Tempo for traces
+- Grafana Agent to collect logs, metrics and traces
+- Grafana
 
 ```
 cd hello-observability/local
@@ -43,14 +53,26 @@ After all the containers are up, you can access the appliction here: http://loca
 
 <img alt="Grafana" src="./images/grafana-local.png" width="300">
 
-Import the dashboard from the `dashboard.json` file to see something beautiful!
+Import the dashboard from the `dashboard.json` file,
 
 <img alt="Import Dashboard" src="./images/dashboard-import.png" width="500">
+
+and see something beautiful!
+ 
 <img alt="Dashboard" src="./images/dashboard.png" width="800">
+
 
 ## Sending logs, metrics and traces to Grafana Cloud
 
-You can also run the application locally, together with the Grafana Agent and the load runner, but send logs, metrics and traces to **Grafana Cloud**. You do need to configure the `cloud/config/agent.yaml` file with your Grafana Cloud information.
+You can also run the application locally, but send logs, metrics and traces to **Grafana Cloud**. You do need to configure the `cloud/config/agent.yaml` file with your Grafana Cloud information. Local components that starts inside Docker include:
+
+- The Hello Observability application
+- The simple load runner
+- Grafana Agent to collect logs, metrics and traces
+
+The architecture looks like: 
+
+<img alt="architecture" src="./images/architecture.png" width="500">
 
 ```
 cd hello-observability/cloud
@@ -58,4 +80,6 @@ docker-compose up
 ```
 
 Similary as you have done locally, import the dashboard and enjoy!
+
+Here is a live version of the [dashboard](https://aquan.grafana.net/goto/KUqE5REnk?orgId=1)
 
