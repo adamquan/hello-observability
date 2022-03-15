@@ -1,16 +1,16 @@
 {
   "__inputs": [
     {
-      "name": "DS_GRAFANACLOUD-AQUAN-LOGS",
-      "label": "grafanacloud-aquan-logs",
+      "name": "DS_LOKI-ADAM",
+      "label": "Loki-Adam",
       "description": "",
       "type": "datasource",
       "pluginId": "loki",
       "pluginName": "Loki"
     },
     {
-      "name": "DS_GRAFANACLOUD-AQUAN-PROM",
-      "label": "grafanacloud-aquan-prom",
+      "name": "DS_PROMETHEUS-ADAM",
+      "label": "Prometheus-Adam",
       "description": "",
       "type": "datasource",
       "pluginId": "prometheus",
@@ -29,7 +29,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.4.3-54429"
+      "version": "8.4.3"
     },
     {
       "type": "panel",
@@ -104,7 +104,7 @@
       "description": "",
       "gridPos": {
         "h": 10,
-        "w": 9,
+        "w": 8,
         "x": 0,
         "y": 0
       },
@@ -113,14 +113,14 @@
         "content": "Dashboard for a simple [Spring Boot](https://spring.io/guides/gs/spring-boot) application, [Hello Observability](https://github.com/adamquan/hello-observability), to demonstrate observability by collecting and correlating logs, metrics and traces with:\n- [Prometheus](https://prometheus.io/)\n- [OpenTelemetry](https://opentelemetry.io/)\n- [Grafana Agent](https://grafana.com/docs/grafana-cloud/agent/)\n- [Grafana Cloud](https://grafana.com/products/cloud/)\n \n<img alt=\"architecture\" src=\"https://github.com/adamquan/hello-observability/raw/main/images/architecture.png\" width=\"1000\">",
         "mode": "markdown"
       },
-      "pluginVersion": "8.4.3-54429",
+      "pluginVersion": "8.4.3",
       "title": "Hello Observability",
       "type": "text"
     },
     {
       "datasource": {
         "type": "loki",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+        "uid": "${DS_LOKI-ADAM}"
       },
       "description": "",
       "fieldConfig": {
@@ -145,7 +145,7 @@
       "gridPos": {
         "h": 5,
         "w": 7,
-        "x": 9,
+        "x": 8,
         "y": 0
       },
       "hideTimeOverride": false,
@@ -154,7 +154,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "area",
-        "justifyMode": "center",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -166,14 +166,24 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.3-54429",
+      "pluginVersion": "8.4.3",
       "targets": [
         {
           "datasource": {
             "type": "loki",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+            "uid": "${DS_LOKI-ADAM}"
           },
-          "expr": "sum by(path) (count_over_time({job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` != \"/metrics\" [$__interval]))",
+          "expr": "sum by(path) (count_over_time({job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` |= \"/observability\" [$__interval]))",
+          "hide": false,
+          "legendFormat": "{{path}}",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_LOKI-ADAM}"
+          },
+          "expr": "sum by(path) (count_over_time({job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` |= \"/hello\" [$__interval]))",
           "legendFormat": "{{path}}",
           "queryType": "range",
           "refId": "A",
@@ -187,7 +197,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+        "uid": "${DS_LOKI-ADAM}"
       },
       "description": "",
       "fieldConfig": {
@@ -212,7 +222,7 @@
       "gridPos": {
         "h": 5,
         "w": 5,
-        "x": 16,
+        "x": 15,
         "y": 0
       },
       "hideTimeOverride": false,
@@ -233,12 +243,12 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.3-54429",
+      "pluginVersion": "8.4.3",
       "targets": [
         {
           "datasource": {
             "type": "loki",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+            "uid": "${DS_LOKI-ADAM}"
           },
           "expr": "sum by(job) (count_over_time({job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` != \"/metrics\" [$__interval]))",
           "legendFormat": "",
@@ -248,13 +258,13 @@
         }
       ],
       "timeFrom": "5m",
-      "title": "Realtime Visitors",
+      "title": "Visitors",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "loki",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+        "uid": "${DS_LOKI-ADAM}"
       },
       "description": "",
       "fieldConfig": {
@@ -281,8 +291,8 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 3,
-        "x": 21,
+        "w": 4,
+        "x": 20,
         "y": 0
       },
       "id": 22,
@@ -300,12 +310,12 @@
         },
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.3-54429",
+      "pluginVersion": "8.4.3",
       "targets": [
         {
           "datasource": {
             "type": "loki",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+            "uid": "${DS_LOKI-ADAM}"
           },
           "expr": "sum by (status) (count_over_time({job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` != \"/metrics\" [$__interval]))",
           "legendFormat": "{{status}}",
@@ -318,7 +328,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+        "uid": "${DS_LOKI-ADAM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -342,9 +352,10 @@
       "gridPos": {
         "h": 5,
         "w": 7,
-        "x": 9,
+        "x": 8,
         "y": 5
       },
+      "hideTimeOverride": false,
       "id": 24,
       "options": {
         "colorMode": "background",
@@ -360,25 +371,36 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.3-54429",
+      "pluginVersion": "8.4.3",
       "targets": [
         {
           "datasource": {
             "type": "loki",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+            "uid": "${DS_LOKI-ADAM}"
           },
-          "expr": "sum by (path) (sum_over_time({job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` != \"/metrics\" | unwrap size [$__interval]))",
+          "expr": "sum by (path) (sum_over_time({job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` |= \"/hello\" | unwrap size [1m]))",
           "legendFormat": "{{path}}",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_LOKI-ADAM}"
+          },
+          "expr": "sum by (path) (sum_over_time({job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` |= \"/observability\" | unwrap size [1m]))",
+          "hide": false,
+          "legendFormat": "{{path}}",
+          "refId": "B"
         }
       ],
+      "timeFrom": "5m",
       "title": "Total Bytes Sent",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "loki",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+        "uid": "${DS_LOKI-ADAM}"
       },
       "description": "",
       "fieldConfig": {
@@ -446,7 +468,7 @@
       "gridPos": {
         "h": 5,
         "w": 5,
-        "x": 16,
+        "x": 15,
         "y": 5
       },
       "id": 28,
@@ -465,7 +487,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+            "uid": "${DS_LOKI-ADAM}"
           },
           "expr": "sum by (status) (count_over_time( {job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` != \"/metrics\" [1m]))",
           "legendFormat": "{{status}}",
@@ -478,7 +500,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+        "uid": "${DS_PROMETHEUS-ADAM}"
       },
       "description": "",
       "fieldConfig": {
@@ -553,7 +575,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+            "uid": "${DS_PROMETHEUS-ADAM}"
           },
           "exemplar": true,
           "expr": "up{job=\"hello-observability\"}",
@@ -570,7 +592,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+        "uid": "${DS_PROMETHEUS-ADAM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -615,12 +637,12 @@
         "showThresholdLabels": true,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "8.4.3-54429",
+      "pluginVersion": "8.4.3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+            "uid": "${DS_PROMETHEUS-ADAM}"
           },
           "exemplar": true,
           "expr": "sum by (path) (rate (requests_total[1m])) * 60",
@@ -635,7 +657,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+        "uid": "${DS_PROMETHEUS-ADAM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -684,12 +706,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.3-54429",
+      "pluginVersion": "8.4.3",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+            "uid": "${DS_PROMETHEUS-ADAM}"
           },
           "exemplar": true,
           "expr": "sum by (path) (rate(request_duration_histogram_bucket{}[1m]))",
@@ -704,7 +726,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+        "uid": "${DS_LOKI-ADAM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -778,7 +800,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+            "uid": "${DS_LOKI-ADAM}"
           },
           "expr": "quantile_over_time (0.90, {job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` != \"/metrics\" | unwrap size [1m] ) by (path)",
           "legendFormat": "{{path}}",
@@ -791,7 +813,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+        "uid": "${DS_PROMETHEUS-ADAM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -865,10 +887,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+            "uid": "${DS_PROMETHEUS-ADAM}"
           },
-          "exemplar": true,
-          "expr": "sum by (path) (rate(requests_total[1m]) * 60)",
+          "exemplar": false,
+          "expr": "sum by (path) (rate(requests_total{job=\"hello-observability\"} [1m]) * 60)",
           "interval": "",
           "legendFormat": "{{path}}",
           "refId": "A"
@@ -880,7 +902,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+        "uid": "${DS_LOKI-ADAM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -991,7 +1013,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+            "uid": "${DS_LOKI-ADAM}"
           },
           "expr": "sum by (path) (rate( {job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` != \"/metrics\" | status !=200 [1m])) / sum by (path) (rate( {job=\"tomcat-access\"} | pattern `<_> - - <_> \"<method> <path> <_>\" <status> <size>` != \"/metrics\" [1m])) * 100",
           "legendFormat": "{{path}}",
@@ -1004,7 +1026,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+        "uid": "${DS_PROMETHEUS-ADAM}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1113,7 +1135,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-PROM}"
+            "uid": "${DS_PROMETHEUS-ADAM}"
           },
           "exemplar": true,
           "expr": "sum by (path) (rate(request_duration_histogram_bucket{}[1m]))",
@@ -1128,7 +1150,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+        "uid": "${DS_LOKI-ADAM}"
       },
       "gridPos": {
         "h": 5,
@@ -1151,7 +1173,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "${DS_GRAFANACLOUD-AQUAN-LOGS}"
+            "uid": "${DS_LOKI-ADAM}"
           },
           "expr": "{job=\"hello-observability\"}",
           "refId": "A"
@@ -1168,13 +1190,13 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Hello Observability",
   "uid": "UjJzQ1L7k",
-  "version": 22,
+  "version": 10,
   "weekStart": ""
 }
