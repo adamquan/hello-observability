@@ -81,5 +81,5 @@ docker-compose up
 
 Similary as you have done locally, import the dashboard and enjoy!
 
-Here is a live version of the [dashboard](https://se-demo.grafana.net/goto/dwNwHHEnz?orgId=1)
+Here is a live version of the [dashboard](https://se-demo.grafana.net/d/UjJzQ1L7k/hello-observability?orgId=1)
 
