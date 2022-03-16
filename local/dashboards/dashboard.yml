@@ -1,0 +1,13 @@
+apiVersion: 1
+
+# See https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards
+providers:
+- name: dashboards
+  orgId: 1
+  folder: ''
+  type: file
+  disableDeletion: false
+  updateIntervalSeconds: 30
+  editable: true
+  options:
+    path: /etc/grafana/provisioning/dashboards

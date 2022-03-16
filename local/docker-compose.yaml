@@ -5,9 +5,12 @@ services:
   hello-observability:
     image: hello-observability
     volumes:
+      # Log files. They are all also accessible to the agent container,
+      # through docker volume mount
       - ./logs/hello-observability.log:/tmp/hello-observability.log
       - ./logs/access_log.log:/tmp/access_log.log
     environment:
+      # Tracing configuration
       JAVA_TOOL_OPTIONS: -javaagent:./opentelemetry-javaagent.jar    
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://tempo:4317
       OTEL_SERVICE_NAME: hello-observability
@@ -56,7 +59,10 @@ services:
   grafana:
     image: grafana/grafana:8.4.3
     volumes:
+      # Pre-load the data sources
       - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      # Pre-load the Hello Observability dashboard
+      - ./dashboards:/etc/grafana/provisioning/dashboards
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
@@ -68,7 +74,9 @@ services:
   agent:
     image: grafana/agent:latest
     volumes:
+      # Agent configuration
       - ./config/agent.yaml:/etc/agent-config/agent.yaml
+      # Log files
       - ./logs/hello-observability.log:/tmp/hello-observability.log
       - ./logs/access_log.log:/tmp/access_log.log
     entrypoint:
