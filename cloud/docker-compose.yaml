@@ -23,11 +23,15 @@ services:
     command: /bin/sh -c "/tmp/load-generator.sh"
   
   agent:
-    image: grafana/agent:latest
+    image: grafana/agent:v0.25.1
     volumes:
       - ./config/agent.yaml:/etc/agent-config/agent.yaml
       - ./logs/hello-observability.log:/tmp/hello-observability.log
       - ./logs/access_log.log:/tmp/access_log.log
+      - /:/host/root:ro,rslave
+      - /sys:/host/sys:ro,rslave
+      - /proc:/host/proc:ro,rslave
+      - /tmp/agent:/etc/agent
     entrypoint:
       - /bin/agent
       - -config.file=/etc/agent-config/agent.yaml
@@ -38,4 +42,4 @@ services:
     environment:
       HOSTNAME: agent
     ports:
-      - "12345:12345"
+      - "4317:4317"

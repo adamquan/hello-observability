@@ -21,6 +21,12 @@ server:
   log_level: debug
   http_listen_port: 12345
 
+integrations:
+  node_exporter:
+    rootfs_path: /host/root
+    sysfs_path: /host/sys
+    procfs_path: /host/proc
+
 logs:
   configs:
   - name: default
@@ -43,19 +49,22 @@ logs:
     clients:
       - url: https://logs-prod3.grafana.net/loki/api/v1/push
         basic_auth:
-          username: <USER>
-          password: <API_KEY>
+          username: 164126
+          password: eyJrIjoiMGMzMWIwZGNkNWQzYjljZDkxM2E5ZDJhODIxYTQ5YWIxZTA0NDdhYiIsIm4iOiJ0ZXN0LWxvZ3MiLCJpZCI6NjAxMzgwfQ==
     target_config:
       sync_period: 10s
 
 traces:
   configs:
   - name: default
+    automatic_logging:
+      backend: stdout
+      roots: true
     remote_write:
       - endpoint: tempo-us-central1.grafana.net:443
         basic_auth:
-          username: <USER>
-          password: <API_KEY>
+          username: 160639
+          password: eyJrIjoiYjkzMDA1NDE0ODRhYWRjYzgwNjg0YTJlNzcyZmY0MThmMDNiOTRjMiIsIm4iOiJ0ZXN0IiwiaWQiOjYwMTM4MH0=
     receivers:
       otlp:
         protocols:
@@ -66,8 +75,8 @@ metrics:
   - name: hello-observability
     remote_write:
     - basic_auth:
-        username: <USER>
-        password: <API_KEY>
+        username: 330312
+        password: eyJrIjoiZjRlZGVhYmMzZDg2NTQ3ODExMDJkYTg0M2RiMjAyZTU3N2JjZDQzNiIsIm4iOiJ0ZXN0LW1ldHJpY3MiLCJpZCI6NjAxMzgwfQ==
       url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
     scrape_configs:
     - job_name: hello-observability
