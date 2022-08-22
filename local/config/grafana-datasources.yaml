@@ -34,6 +34,12 @@ datasources:
   uid: tempo
   jsonData:
     httpMethod: GET
+    tracesToMetrics:
+      datasourceUid: 'Prometheus'
+      tags: [{ key: 'service.name', value: 'service' }, { key: 'job' }]
+      queries:
+        - name: 'Sample query'
+          query: 'sum(rate(tempo_spanmetrics_latency_bucket{$__tags}[5m]))'
     tracesToLogs:
       datasourceUid: 'loki'
       tags: ['job', 'instance']
@@ -45,7 +51,7 @@ datasources:
       filterBySpanID: false
       lokiSearch: true
     serviceMap:
-      datasourceUid: 'prometheus'
+      datasourceUid: 'Prometheus'
     search:
       hide: false
     nodeGraph:

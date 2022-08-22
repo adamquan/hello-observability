@@ -1,6 +1,9 @@
 server:
   http_listen_port: 3200
 
+search_enabled: true
+metrics_generator_enabled: true
+
 distributor:
   receivers:                           # this configuration will listen on all ports and protocols that tempo is capable of.
     jaeger:                            # the receives all come from the OpenTelemetry collector.  more configuration information can
@@ -43,3 +46,29 @@ storage:
     pool:
       max_workers: 100                 # worker pool determines the number of parallel requests to the object store backend
       queue_depth: 10000
+
+metrics_generator:
+  processor:
+    span_metrics:
+        dimensions:
+          - http.method
+          - http.target
+    service_graphs:
+        dimensions:
+          - http.method
+          - http.target          
+  registry:
+    collection_interval: 5s
+    external_labels:
+      source: tempo
+      group: 'hello-observability'
+  storage:
+    path: /tmp/tempo/generator/wal
+    remote_write:
+      - url: http://prometheus:9090/api/v1/write
+        send_exemplars: true
+
+
+overrides:
+  max_search_bytes_per_trace: 5000000
+  metrics_generator_processors: ['service-graphs', 'span-metrics']

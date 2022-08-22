@@ -8,3 +8,14 @@ scrape_configs:
     scrape_interval: 10s
     static_configs:
       - targets: [hello-observability:8080]
+
+
+  - job_name: loki
+    scrape_interval: 10s
+    static_configs:
+      - targets: [loki:3100]
+
+  - job_name: tempo
+    scrape_interval: 10s
+    static_configs:
+      - targets: [tempo:3200]
