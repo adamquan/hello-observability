@@ -20,6 +20,23 @@ datasources:
       - datasourceUid: tempo
         name: trace_id
 
+- name: TempoPrometheus
+  type: prometheus
+  access: proxy
+  orgId: 1
+  url: http://prometheus:9090
+  basicAuth: false
+  isDefault: false
+  version: 1
+  editable: true
+  jsonData:
+    httpMethod: POST
+    exemplarTraceIdDestinations:
+      # Field with internal link pointing to data source in Grafana.
+      # datasourceUid value can be anything, but it should be unique across all defined data source uids.
+      - datasourceUid: tempo
+        name: traceID
+
 # See https://grafana.com/docs/grafana/latest/datasources/tempo/#provision-the-tempo-data-source
 - name: Tempo
   type: tempo
