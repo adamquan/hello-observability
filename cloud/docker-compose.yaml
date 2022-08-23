@@ -28,9 +28,9 @@ services:
       - ./config/agent.yaml:/etc/agent-config/agent.yaml
       - ./logs/hello-observability.log:/tmp/hello-observability.log
       - ./logs/access_log.log:/tmp/access_log.log
-      - /:/host/root:ro,rslave
-      - /sys:/host/sys:ro,rslave
-      - /proc:/host/proc:ro,rslave
+      # - /:/host/root:ro,rslave
+      # - /sys:/host/sys:ro,rslave
+      # - /proc:/host/proc:ro,rslave
       - /tmp/agent:/etc/agent
     entrypoint:
       - /bin/agent

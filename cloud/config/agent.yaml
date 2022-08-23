@@ -21,11 +21,12 @@ server:
   log_level: debug
   http_listen_port: 12345
 
-integrations:
-  node_exporter:
-    rootfs_path: /host/root
-    sysfs_path: /host/sys
-    procfs_path: /host/proc
+#integrations:
+#  node_exporter:
+#    enabled: true
+#    rootfs_path: /host/root
+#    sysfs_path: /host/sys
+#    procfs_path: /host/proc
 
 logs:
   configs:
