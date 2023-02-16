@@ -3,7 +3,7 @@ services:
 
   # The hello-observability application
   hello-observability:
-    image: hello-observability
+    image: adamquan/hello-observability
     volumes:
       # Log files. They are all also accessible to the agent container,
       # through docker volume mount
